@@ -1,0 +1,11 @@
+services:
+  mysql:
+    container_name: 'zui-mysql'
+    image: 'mysql:9.3.0'
+    environment:
+      - 'MYSQL_DATABASE=zui_dev'
+      - 'MYSQL_PASSWORD=password'
+      - 'MYSQL_ROOT_PASSWORD=password'
+      - 'MYSQL_USER=admin'
+    ports:
+      - '3306:3306'
