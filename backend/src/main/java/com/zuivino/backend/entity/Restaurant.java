@@ -1,14 +1,18 @@
 package com.zuivino.backend.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity
-public class Restaurants {
+public class Restaurant {
     
     @Id
     @GeneratedValue
@@ -30,6 +34,9 @@ public class Restaurants {
     private LocalDateTime addedTimestamp;
 
     private LocalDateTime updatedTimestamp;
+
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<WineList> listOfWineList = new ArrayList<>();
 
     public Integer getRestaurantId() {
         return this.restaurantId;
@@ -101,5 +108,23 @@ public class Restaurants {
 
     public void setUpdatedTimestamp(LocalDateTime updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
+    }
+
+    public List<WineList> getListOfWineList() {
+        return this.listOfWineList;
+    }
+
+    public void setListOfWineList(List<WineList> listOfWineList) {
+        this.listOfWineList = listOfWineList;
+    }
+
+    public void addWinelist(WineList wineList) {
+        this.listOfWineList.add(wineList);
+        wineList.setRestaurant(this); // maintain bidirectional link
+    }
+
+    public void removeWinelist(WineList wineList) {
+        this.listOfWineList.remove(wineList);
+        wineList.setRestaurant(null); // clear the relationship
     }
 }
