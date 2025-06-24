@@ -35,7 +35,7 @@ public class Restaurant {
 
     private LocalDateTime updatedTimestamp;
 
-    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "restaurant_id", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WineList> listOfWineList = new ArrayList<>();
 
     public Integer getRestaurantId() {

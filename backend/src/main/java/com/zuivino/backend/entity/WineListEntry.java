@@ -27,6 +27,10 @@ public class WineListEntry {
     @JoinColumn(name="winelist_id", nullable=false)
     private WineList wineList;
 
+    @ManyToOne
+    @JoinColumn(name="wine_id", nullable=false)
+    private Wine wine;
+
     public Integer getWineListEntryId() {
         return this.wineListEntryId;
     }
@@ -57,5 +61,13 @@ public class WineListEntry {
 
     public void setWineList(WineList wineList) {
         this.wineList = wineList;
+    }
+
+    public Wine getWine() {
+        return this.wine;
+    }
+
+    public void setWine(Wine wine) {
+        this.wine = wine;
     }
 }

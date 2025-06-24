@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,8 +30,7 @@ public class WineList {
     @JoinColumn(name="restaurant_id", nullable=false)
     private Restaurant restaurant;
 
-    @OneToMany
-    @JoinColumn(name="winelist_id", nullable=false)
+    @OneToMany(mappedBy = "winelist_id", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WineListEntry> listOfWineListEntry = new ArrayList<>();
 
     public Integer getWineListId() {
