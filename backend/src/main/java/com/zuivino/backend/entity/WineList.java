@@ -1,6 +1,8 @@
 package com.zuivino.backend.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class WineList {
@@ -25,6 +28,10 @@ public class WineList {
     @ManyToOne
     @JoinColumn(name="restaurant_id", nullable=false)
     private Restaurant restaurant;
+
+    @OneToMany
+    @JoinColumn(name="winelist_id", nullable=false)
+    private List<WineListEntry> listOfWineListEntry = new ArrayList<>();
 
     public Integer getWineListId() {
         return this.wineListId;
@@ -64,5 +71,23 @@ public class WineList {
 
     public void setRestaurant(Restaurant restaurant) {
         this.restaurant = restaurant;
+    }
+
+    public List<WineListEntry> getListOfWineListEntry() {
+        return this.listOfWineListEntry;
+    }
+
+    public void setListOfWineListEntry(List<WineListEntry> listOfWineListEntry) {
+        this.listOfWineListEntry = listOfWineListEntry;
+    }
+
+    public void addWineListEntry(WineListEntry wineListEntry) {
+        this.listOfWineListEntry.add(wineListEntry);
+        wineListEntry.setWineList(this);
+    }
+
+    public void removeWineListEntry(WineListEntry wineListEntry) {
+        this.listOfWineListEntry.remove(wineListEntry);
+        wineListEntry.setWineList(null);
     }
 }
