@@ -11,6 +11,8 @@ Version Control:
         - spring-boot-starter-data-jpa
         - spring-boot-docker-compose
         - junit-jupiter
+        - lombok
+        - spring-boot-devtools
     - Maven: Apache Maven 3.9.10
     - MySQL: 9.3.0
     - Docker: 28.1.1
