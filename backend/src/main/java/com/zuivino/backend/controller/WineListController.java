@@ -14,7 +14,6 @@ import com.zuivino.backend.repository.RestaurantRepository;
 import com.zuivino.backend.repository.WineListRepository;
 
 import jakarta.transaction.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 

@@ -1,7 +1,5 @@
 package com.zuivino.backend.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.zuivino.backend.dto.RestaurantDTO;
 import com.zuivino.backend.entity.Restaurant;
-import com.zuivino.backend.entity.WineList;
 import com.zuivino.backend.repository.RestaurantRepository;
 
 
