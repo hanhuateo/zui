@@ -1,93 +1,81 @@
 package com.zuivino.backend.entity;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.UUID;
 
-import jakarta.persistence.CascadeType;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Table(name = "winelists", uniqueConstraints = {
+    @UniqueConstraint(name = "uk_winelist", columnNames = {"winelist_name"})
+})
+@Getter
+@Setter
+@NoArgsConstructor
 public class WineList {
-    
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Integer wineListId;
 
-    private String wineListName;
-
-    private LocalDateTime addedTimestamp;
-
-    private LocalDateTime updatedTimestamp;
-
-    @ManyToOne
-    @JoinColumn(name="restaurant_id", nullable=false)
-    private Restaurant restaurant;
-
-    @OneToMany(mappedBy = "winelist_id", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<WineListEntry> listOfWineListEntry = new ArrayList<>();
-
-    public Integer getWineListId() {
-        return this.wineListId;
-    }
-
-    public void setWineListId(Integer wineListId) {
-        this.wineListId = wineListId;
-    }
-
-    public String getWineListName() {
-        return this.wineListName;
-    }
-
-    public void setWineListName(String wineListName) {
+    @Builder
+    public WineList(String wineListName, Restaurant restaurant) {
         this.wineListName = wineListName;
-    }
-
-    public LocalDateTime getAddedTimestamp() {
-        return this.addedTimestamp;
-    }
-
-    public void setAddedTimestamp(LocalDateTime addedTimestamp) {
-        this.addedTimestamp = addedTimestamp;
-    }
-
-    public LocalDateTime getUpdatedTimestamp() {
-        return this.updatedTimestamp;
-    }
-
-    public void setUpdatedTimestamp(LocalDateTime updatedTimestamp) {
-        this.updatedTimestamp = updatedTimestamp;
-    }
-
-    public Restaurant getRestaurant() {
-        return this.restaurant;
-    }
-
-    public void setRestaurant(Restaurant restaurant) {
         this.restaurant = restaurant;
     }
 
-    public List<WineListEntry> getListOfWineListEntry() {
-        return this.listOfWineListEntry;
+    // Columns
+    
+    @Id
+    @Column(name = "winelist_id", nullable = false, updatable = false, length = 36)
+    @Setter(AccessLevel.NONE)
+    private String wineListId;
+
+    @Column(name = "winelist_name", nullable = false, length = 255)
+    private String wineListName;
+
+    @Column(name = "added_timestamp", nullable = false)
+    private LocalDateTime addedTimestamp;
+
+    @Column(name = "updated_timestamp", nullable = false)
+    private LocalDateTime updatedTimestamp;
+
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="restaurant_id", nullable=false, foreignKey = @ForeignKey(name = "fk_winelists_restaurant"))
+    private Restaurant restaurant;
+
+    @PrePersist
+    public void prePersist() {
+        if (this.wineListId == null) {
+            this.wineListId = UUID.randomUUID().toString();
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+        if (this.addedTimestamp == null) {
+            this.addedTimestamp = now;
+        }
+        if (this.updatedTimestamp == null) {
+            this.updatedTimestamp = now;
+        }
     }
 
-    public void setListOfWineListEntry(List<WineListEntry> listOfWineListEntry) {
-        this.listOfWineListEntry = listOfWineListEntry;
+    @PreUpdate
+    public void preUpdate() {
+        this.updatedTimestamp = LocalDateTime.now();
     }
 
-    public void addWineListEntry(WineListEntry wineListEntry) {
-        this.listOfWineListEntry.add(wineListEntry);
-        wineListEntry.setWineList(this);
-    }
-
-    public void removeWineListEntry(WineListEntry wineListEntry) {
-        this.listOfWineListEntry.remove(wineListEntry);
-        wineListEntry.setWineList(null);
-    }
 }

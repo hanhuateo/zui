@@ -84,9 +84,6 @@ public class Restaurant {
     @Column(nullable = true)
     private Status status;
 
-    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<WineList> listOfWineList = new ArrayList<>();
-
     @PrePersist
     public void prePersist() {
         if (this.restaurantId == null) {
@@ -105,17 +102,5 @@ public class Restaurant {
     @PreUpdate
     public void preUpdate() {
         this.updatedTimestamp = LocalDateTime.now();
-    }
-
-    // Helper Methods
-
-    public void addWinelist(WineList wineList) {
-        this.listOfWineList.add(wineList);
-        wineList.setRestaurant(this); // maintain bidirectional link
-    }
-
-    public void removeWinelist(WineList wineList) {
-        this.listOfWineList.remove(wineList);
-        wineList.setRestaurant(null); // clear the relationship
     }
 }

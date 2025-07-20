@@ -1,16 +1,19 @@
 package com.zuivino.backend.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.zuivino.backend.dto.RestaurantDTO;
 import com.zuivino.backend.entity.Restaurant;
+import com.zuivino.backend.entity.WineList;
 import com.zuivino.backend.repository.RestaurantRepository;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 
@@ -37,7 +40,6 @@ public class RestaurantController {
     public Restaurant getRestaurant(@RequestParam String name, String address) {
         return this.restaurantRepository.findByNameAndAddress(name, address);
     }
-    
     
     @PostMapping(path="/add")
     public String addRestaurant(@RequestBody RestaurantDTO dto) {
